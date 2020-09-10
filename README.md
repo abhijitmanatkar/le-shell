@@ -52,6 +52,11 @@ $ exit
 - If it is executed in the background, the shell does not wait for the termination of the child process and continues with the main loop.
 - A signal handler is set up to handle the `SIGCHLD` signal emitted by a child process running in the background. When this signal is received, the parent process prints termination details of the process.
 
+### Pinfo
+- The PID is obtained by using the `getpid()` system call.
+- The path to the executable is obtained by reading the symbolic link `/proc/<PID/exe>`.
+- Other information about the process is found in the file `/proc/<PID>/stat`.
+
 ### History
 - History is stored in program memory as an array of fixed size and in the file  `history.txt` in the directory of execution.
 - History is loaded from the file at the start of the shell. 

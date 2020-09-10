@@ -5,7 +5,8 @@
 extern char HOMEDIR[1024];
 
 void prompt() {
-    char* username = getenv("USER");
+    // display the shell prompt
+    char* username = getenv("USER");    // taken from environment variable
     char hostname[1024];
     char dirname[1024];
     getcwd(dirname, 1024);
