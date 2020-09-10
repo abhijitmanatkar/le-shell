@@ -8,7 +8,10 @@ In the source directory, execute:
 $ make
 $ ./leshell
 ```
-Press <kbd>Ctrl + C</kbd> to exit.
+Press <kbd>Ctrl + C</kbd> to exit or execute: 
+```shell
+$ exit
+```
 
 ## Features
 - A prompt showing username, hostname and current directory.
@@ -18,6 +21,7 @@ Press <kbd>Ctrl + C</kbd> to exit.
 - Display termination information of a command executed in the background.
 - User-defined command `pinfo <PID>` that displays process info on the screen.
  - Support for absolute and relative paths. Also supports `~` which points to the directory of execution.
+ - A persistent history of upto 20 commands.
 
 ## Implementation Details
 
@@ -48,24 +52,31 @@ Press <kbd>Ctrl + C</kbd> to exit.
 - If it is executed in the background, the shell does not wait for the termination of the child process and continues with the main loop.
 - A signal handler is set up to handle the `SIGCHLD` signal emitted by a child process running in the background. When this signal is received, the parent process prints termination details of the process.
 
+### History
+- History is stored in program memory as an array of fixed size and in the file  `history.txt` in the directory of execution.
+- History is loaded from the file at the start of the shell. 
+- The file is not updated after every command. Instead, the array in program memory is updated with every command. Changes are written to the file only when the shell exits. 
+- Two pointers are used to keep track of the start and end positions in the array. 
+- Old commands are overwritten when the maximum limit of 20 is reached.
+
 ## File wise breakdown
  - `main.c` contains the main shell loop for reading, parsing and executiong commands.
  - `headers.h` contains common header files and definitions of some important constants.
  - `prompt.c` contains the function for printing the shell prompt.
  - `formatpath.c` contains functions to convert paths from relative to absolute and from absolute to relative.
  - `exexute.c` has funtions for executing system commands in either freground or background.
+ - `history.c` contains functions for displaying the history, adding a command to history and for loading and storing history in a local file.
  - `cd.c` contains the definition of the `cd` command.
  - `ls.c` contains the definition of the `ls` command.
  - `pwd.c` contains the definition of the `pwd` command.
  - `echo.c` contains the definition of the `echo` command.
  - `pinfo.c` contains the definition of the `pinfo` command.
  - `makefile` contains compilation instructions.
-
-*A header file is associated with each C file.* 
+ - `history.txt` stores the history of commands entered.
 
 ## Some assumptions
-- Reasonable assumptions are made about the maximum size of various parameters like:
-    - Number of commands
-    - Number of arguments per command
-    - Length of a file path
-    - Number of files in a directory
+Reasonable assumptions are made about the maximum size of various parameters like:
+- Number of commands
+- Number of arguments per command
+- Length of a file path
+- Number of files in a directory
