@@ -1,0 +1,6 @@
+#include "echo.h"
+#include "pwd.h"
+#include "cd.h"
+#include "pinfo.h"
+#include "ls.h"
+#include "history.h"

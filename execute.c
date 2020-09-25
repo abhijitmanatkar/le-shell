@@ -34,6 +34,7 @@ int execute(char* argv[], int bg){
         int exec_ret = execvp(argv[0], argv);
         if(exec_ret < 0){
             perror(argv[0]);
+            return 1;
         }
     }
     else{

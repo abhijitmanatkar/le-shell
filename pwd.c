@@ -5,7 +5,7 @@ int pwd(int argc){
     // print current working directory
 
     if(argc > 1){
-        printf("pwd: too many arguments\n");
+        fprintf(stderr, "pwd: too many arguments\n");
         return 1;
     }
     char dirname[1024];
