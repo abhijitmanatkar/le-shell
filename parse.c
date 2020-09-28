@@ -136,6 +136,12 @@ int parse_redir(char* command, int in_fd, int out_fd){
     else if(strcmp(command_args[0], "exit") == 0){
         exit_fn();
     }
+    else if(strcmp(command_args[0], "setenv") == 0){
+        set_env(arg_no, command_args);
+    }
+    else if(strcmp(command_args[0], "unsetenv") == 0){
+        unset_env(arg_no, command_args);
+    }
 
     // system commands
     else{
