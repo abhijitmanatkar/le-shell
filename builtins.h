@@ -5,3 +5,4 @@
 #include "ls.h"
 #include "history.h"
 #include "setenv.h"
+#include "jobs.h"

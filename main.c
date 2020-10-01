@@ -9,12 +9,15 @@
 #include "ls.h"
 #include "history.h"
 #include "parse.h"
+#include "process.h"
 
 extern int errno;
 
 char HOMEDIR[DIRNAME_SZ];
 char* command_list[MAX_COMMANDS];
 char* arg_list[MAX_ARGS];
+
+process* PROCESSES;
 
 /*
 void exit_fn(){
@@ -26,8 +29,24 @@ void exit_fn(){
 
 int main(){
 
+    int shell_terminal = STDIN_FILENO;
+    
+    signal (SIGINT, SIG_IGN);
+    signal (SIGQUIT, SIG_IGN);
+    signal (SIGTSTP, SIG_IGN);
+    signal (SIGTTIN, SIG_IGN);
+    signal (SIGTTOU, SIG_IGN);
+    signal (SIGCHLD, SIG_IGN);
+
+    int shell_pid = getpid();
+
+    setpgid(shell_pid, shell_pid);
+    tcsetpgrp(shell_terminal, shell_pid);
+
     getcwd(HOMEDIR, 1024);
     load_history();
+
+    PROCESSES = NULL;
 
     while(1){
         
