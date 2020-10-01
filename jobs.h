@@ -5,4 +5,8 @@ int jobs(int arcgc, char* argv[]);
 
 int kjob(int argc, char* argv[]);
 
+int bg(int argc, char* argv[]);
+
+int fg(int argc, char* argv[]);
+
 #endif

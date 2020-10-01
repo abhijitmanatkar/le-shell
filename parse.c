@@ -145,6 +145,12 @@ int parse_redir(char* command, int in_fd, int out_fd){
     else if(strcmp(command_args[0], "kjob") == 0){
         kjob(arg_no, command_args);
     }
+    else if(strcmp(command_args[0], "bg") == 0){
+        bg(arg_no, command_args);
+    }
+    else if(strcmp(command_args[0], "fg") == 0){
+        fg(arg_no, command_args);
+    }
 
     else if(strcmp(command_args[0], "quit") == 0){
         exit_fn();

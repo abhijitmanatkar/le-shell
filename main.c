@@ -33,7 +33,7 @@ int main(){
 
     shell_terminal = STDIN_FILENO;
     
-    //signal (SIGINT, SIG_IGN);
+    signal (SIGINT, SIG_IGN);
     signal (SIGQUIT, SIG_IGN);
     signal (SIGTSTP, SIG_IGN);
     signal (SIGTTIN, SIG_IGN);
