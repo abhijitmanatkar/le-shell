@@ -16,4 +16,8 @@ process* del_process_by_pid(int pid, process* head);
 
 process* del_process_by_job_num(int job_num, process* head);
 
+process* get_process_by_job_num(int job_num, process* head);
+
+process* get_process_by_pid(int pid, process* head);
+
 #endif

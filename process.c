@@ -98,6 +98,24 @@ process* del_process_by_job_num(int job_num, process* head){
     return head;
 }
 
+process* get_process_by_job_num(int job_num, process* head){
+    
+    process* curr = head;
+    while(curr != NULL && curr->job_num != job_num){
+        curr = curr->next;
+    }
+    return curr;
+}
+
+process* get_process_by_pid(int pid, process* head){
+    
+    process* curr = head;
+    while(curr != NULL && curr->pid != pid){
+        curr = curr->next;
+    }
+    return curr;
+}
+
 /*
 int main(){
     
