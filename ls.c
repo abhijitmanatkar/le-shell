@@ -181,16 +181,18 @@ int ls(int argc, char* argv[]){
         dir_args_no++;
     }   
 
+    int exit_status = 0;
     for(int i = 0; i < dir_args_no; i++){
         //printf("%s\n", to_abs(dir_args[i]));
         dir_read = opendir(to_abs(dir_args[i]));
         if(dir_read == NULL){
             perror(dir_args[i]);
+            exit_status = 1;
             continue;
         }
         if(i > 0) printf("\n");
         if(dir_args_no > 1) printf("%s:\n", dir_args[i]);
         print_files(to_abs(dir_args[i]), L_FLAG, A_FLAG);
     }
-    return 0;
+    return exit_status;
 }

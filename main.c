@@ -1,12 +1,7 @@
 #include "headers.h"
+#include "init.h"
 #include "prompt.h"
 #include "formatpath.h"
-#include "echo.h"
-#include "pwd.h"
-#include "cd.h"
-#include "execute.h"
-#include "pinfo.h"
-#include "ls.h"
 #include "history.h"
 #include "parse.h"
 #include "process.h"
@@ -14,52 +9,30 @@
 extern int errno;
 
 char HOMEDIR[DIRNAME_SZ];
+char LASTDIR[DIRNAME_SZ];
+
 char* command_list[MAX_COMMANDS];
 char* arg_list[MAX_ARGS];
 
+int shell_terminal;
 process* PROCESSES;
 
-/*
-void exit_fn(){
-    // store history and exit
-    store_history();
-    exit(0);
-}
-*/
+size_t INPBUF_SZ = 4096;
+char* inpbuf;
 
-int shell_terminal;
+int EXIT_STATUS;
 
 int main(){
 
-    shell_terminal = STDIN_FILENO;
-    
-    signal (SIGINT, SIG_IGN);
-    signal (SIGQUIT, SIG_IGN);
-    signal (SIGTSTP, SIG_IGN);
-    signal (SIGTTIN, SIG_IGN);
-    signal (SIGTTOU, SIG_IGN);
-    signal (SIGCHLD, SIG_IGN);
-
-    int shell_pid = getpid();
-
-    setpgid(shell_pid, shell_pid);
-    tcsetpgrp(shell_terminal, shell_pid);
-
-    getcwd(HOMEDIR, 1024);
-    load_history();
-
-    PROCESSES = NULL;
+    init();
 
     while(1){
-        
-        // define buffer for input
-        size_t INPBUF_SZ = 4096;
-        char* inpbuf = (char*) malloc(INPBUF_SZ);
 
         prompt();
         
         // get input
-        getline(&inpbuf, &INPBUF_SZ, stdin);
+        int inp_size = getline(&inpbuf, &INPBUF_SZ, stdin);
+        if(inp_size < 1) quit();
         inpbuf[strlen(inpbuf) - 1] = '\0';
 
         // seperating commands
@@ -75,7 +48,7 @@ int main(){
         }
 
         for(int i = 0; i < command_no; i++){
-            parse_pipe(command_list[i]);
+            EXIT_STATUS = parse_pipe(command_list[i]);
         }
     }
 

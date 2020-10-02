@@ -2,6 +2,7 @@
 #include "headers.h"
 
 extern char HOMEDIR[DIRNAME_SZ];
+extern char LASTDIR[DIRNAME_SZ];
 
 char retstrTR[DIRNAME_SZ];    // return string for to_rel()
 char retstrTA[DIRNAME_SZ];    // retrun string for to_abs()

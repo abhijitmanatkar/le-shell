@@ -9,4 +9,6 @@ int bg(int argc, char* argv[]);
 
 int fg(int argc, char* argv[]);
 
+int overkill(int argc);
+
 #endif

@@ -1,7 +1,7 @@
 #ifndef __HISTORY_H
 #define __HISTORY_H
 
-void show_history(int argc, char* argv[]);
+int show_history(int argc, char* argv[]);
 
 void load_history();
 

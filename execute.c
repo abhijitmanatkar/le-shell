@@ -4,9 +4,9 @@
 #include <signal.h>
 
 char* cmd_name;
-extern process* PROCESSES;
 
 extern int shell_terminal;
+extern process* PROCESSES;
 
 void sigchld_handler(int signum){
     // handler for SIGCHLD when background child process exits
@@ -69,9 +69,9 @@ int execute(char* argv[], int bg){
         int exec_ret = execvp(argv[0], argv);
         if(exec_ret < 0){
             perror(argv[0]);
-            return 1;
+            exit(EXIT_FAILURE);
         }
-        return 0;
+        exit(0);
     }
     else{
         // parent process
@@ -87,9 +87,11 @@ int execute(char* argv[], int bg){
                 PROCESSES = add_process(fork_ret, argv[0], PROCESSES);
                 process* added_process = get_process_by_pid(fork_ret, PROCESSES);
                 fprintf(stderr, "Suspended [%d] %s\n", added_process->job_num, added_process->name);
+                tcsetpgrp(shell_terminal, getpid());
+                return 1;
             }
-
             tcsetpgrp(shell_terminal, getpid());
+            return WEXITSTATUS(status);
         }
         else{
             PROCESSES = add_process(fork_ret, argv[0], PROCESSES);

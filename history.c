@@ -20,12 +20,12 @@ int history_index(int n){
     return (HIST_STRT + n) % MAX_STORED_HISTORY; 
 }
 
-void show_history(int argc, char* argv[]){
+int show_history(int argc, char* argv[]){
     // Prints history to the terminal
     
     if(argc > 2){
         fprintf(stderr, "history: too many arguments\n");
-        return;
+        return 1;
     }
 
     int N;
@@ -37,6 +37,7 @@ void show_history(int argc, char* argv[]){
     for(int i = 0; i < n; i++){
         printf("%s\n", (char*)(HISTORY + history_index(history_size() - n + i)));
     }
+    return 0;
 
 }
 

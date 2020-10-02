@@ -54,14 +54,21 @@ int get_pinfo(int pid, int print_errs){
     return 0;
 }
 
-void pinfo(int argc, char* argv[]){
+int pinfo(int argc, char* argv[]){
     // displays info about a process with the given PID
 
     pid_t pid;
     if(argc == 1) pid = getpid();
     else pid = atoi(argv[1]);
-
-    if(!get_pinfo(pid, 1))
+    /*
+    if(!get_pinfo(pid, 1)){
         print_pinfo(pid);
+        return 0;
+    }
+    */
+    if(get_pinfo(pid, 1) != 0)
+        return 1;
+    print_pinfo(pid);
+    return 0;
 }
 

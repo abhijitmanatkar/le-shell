@@ -1,15 +1,10 @@
 #include "parse.h"
+#include "init.h"
 #include "headers.h"
 #include "builtins.h"
 #include "execute.h"
 #include "formatpath.h"
 #include <fcntl.h>
-
-void exit_fn(){
-    // store history and exit
-    store_history();
-    exit(0);
-}
 
 char* pipe_seperated_commands[MAX_COMMANDS];
 char* command_args[MAX_ARGS];
@@ -113,47 +108,51 @@ int parse_redir(char* command, int in_fd, int out_fd){
         dup2(new_out_fd, STDOUT_FILENO);
     }
 
+    int exit_status;
 
     // built ins and user defined commands
     if(strcmp(command_args[0], "echo") == 0){
-        echo(arg_no, command_args);
+        exit_status = echo(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "pwd") == 0){
-        pwd(arg_no);
+        exit_status = pwd(arg_no);
     }
     else if(strcmp(command_args[0], "cd") == 0){
-        cd(arg_no, command_args);
+        exit_status = cd(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "pinfo") == 0){
-        pinfo(arg_no, command_args);
+        exit_status = pinfo(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "ls") == 0){
-        ls(arg_no, command_args);
+        exit_status = ls(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "history") == 0){
-        show_history(arg_no, command_args);
+        exit_status = show_history(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "setenv") == 0){
-        set_env(arg_no, command_args);
+        exit_status = set_env(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "unsetenv") == 0){
-        unset_env(arg_no, command_args);
+        exit_status = unset_env(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "jobs") == 0){
-        jobs(arg_no, command_args);
+        exit_status = jobs(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "kjob") == 0){
-        kjob(arg_no, command_args);
+        exit_status = kjob(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "bg") == 0){
-        bg(arg_no, command_args);
+        exit_status = bg(arg_no, command_args);
     }
     else if(strcmp(command_args[0], "fg") == 0){
-        fg(arg_no, command_args);
+        exit_status = fg(arg_no, command_args);
+    }
+    else if(strcmp(command_args[0], "overkill") == 0){
+        exit_status = overkill(arg_no);
     }
 
     else if(strcmp(command_args[0], "quit") == 0){
-        exit_fn();
+        quit();
     }
 
     // system commands
@@ -164,11 +163,11 @@ int parse_redir(char* command, int in_fd, int out_fd){
             bg = 1;
         }
         command_args[arg_no] = NULL;
-        execute(command_args, bg);
+        exit_status = execute(command_args, bg);
     }
 
     dup2(old_in_fd, STDIN_FILENO);
     dup2(old_out_fd, STDOUT_FILENO);
 
-    return 0;
+    return exit_status;
 }

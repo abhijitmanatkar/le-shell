@@ -90,5 +90,25 @@ int fg(int argc, char* argv[]){
     }
     tcsetpgrp(shell_terminal, getpid());
     
-    return 0;
+    return WEXITSTATUS(status);
+}
+
+int overkill(int argc){
+
+    if(argc > 1){
+        fprintf(stderr, "overkill: too many arguments");
+        return 1;
+    }
+
+    int pid;
+    process* curr = PROCESSES;
+    while(curr != NULL){
+        pid = curr->pid;
+        curr = curr->next;
+        if(kill(-1 * pid, SIGKILL) < 0){
+            fprintf(stderr, "overkill: could not kill %d\n", pid);
+            return 1;
+        }
+    }
+     return 0;
 }
