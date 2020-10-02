@@ -31,6 +31,7 @@ void sigchld_handler(int signum){
 
         else if(WIFSIGNALED(prstatus)){
             fprintf(stderr, "\n%s with pid %d was terminated by signal %d\n", proc->name, pid, WTERMSIG(prstatus));
+            PROCESSES = del_process_by_pid(pid, PROCESSES);
         }
     }
     return;
