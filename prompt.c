@@ -2,15 +2,15 @@
 #include "headers.h"
 #include "formatpath.h"
 
-extern char HOMEDIR[1024];
+extern char HOMEDIR[DIRNAME_SZ];
 extern int EXIT_STATUS;
 
 void prompt() {
     // display the shell prompt
     char* username = getenv("USER");    // taken from environment variable
-    char hostname[1024];
-    char dirname[1024];
-    getcwd(dirname, 1024);
+    char hostname[DIRNAME_SZ];
+    char dirname[DIRNAME_SZ];
+    getcwd(dirname, DIRNAME_SZ);
     char* reldirname = to_rel(dirname);
     gethostname(hostname, 1000);
     if(EXIT_STATUS != -1){

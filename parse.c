@@ -11,7 +11,9 @@ char* command_args[MAX_ARGS];
 int pipe_fd[2];
 
 int parse_pipe(char* line){
+    // seperate commands by "|" and create pipes to redirect input and output
 
+    // seperate by "|"
     char* pipe_delim = "|";
     char* command_str = strtok(line, pipe_delim);
     int command_no = 0;
@@ -21,6 +23,7 @@ int parse_pipe(char* line){
         command_no++;
     }
 
+    // create pipes 
     int in_fd = STDIN_FILENO;
     for(int i = 0; i < command_no - 1; i++){
         pipe(pipe_fd);
@@ -32,18 +35,20 @@ int parse_pipe(char* line){
 }
 
 int parse_redir(char* command, int in_fd, int out_fd){
+    // check for redirection and execute
     
     int input_redirected = 0;
     int output_redirected = 0;
     int old_in_fd, old_out_fd;
 
+    // save old file descriptors for stdin and stdout
     old_in_fd = dup(STDIN_FILENO);
     old_out_fd = dup(STDOUT_FILENO);
 
+    // if piping has been done, change the file descriptors 
     if(in_fd != STDIN_FILENO){
         dup2(in_fd, STDIN_FILENO);
     }
-    
     if(out_fd != STDOUT_FILENO){
         dup2(out_fd, STDOUT_FILENO);
     }
@@ -58,6 +63,7 @@ int parse_redir(char* command, int in_fd, int out_fd){
         arg_no++;
     }
 
+    // check for input/output redirection
     char* new_in_path;
     char* new_out_path;
     int output_redir_idx;
@@ -81,6 +87,7 @@ int parse_redir(char* command, int in_fd, int out_fd){
     }
     command_args[arg_no] = NULL;
 
+    // change stdin file descriptor in case of input redirection
     if(input_redirected){
         int new_in_fd = open(to_abs(new_in_path), O_RDONLY);
         if(new_in_fd < 0){
@@ -90,7 +97,9 @@ int parse_redir(char* command, int in_fd, int out_fd){
         dup2(new_in_fd, STDIN_FILENO);
     }
 
+    // change stdout file descriptor in case of output redirection
     if(output_redirected == 1){
+        // write from start of file
         int new_out_fd = open(to_abs(new_out_path), O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if(new_out_fd < 0){
             perror(new_out_path);
@@ -98,8 +107,8 @@ int parse_redir(char* command, int in_fd, int out_fd){
         }
         dup2(new_out_fd, STDOUT_FILENO);
     }
-
     else if(output_redirected == 2){
+        // append to file
         int new_out_fd = open(to_abs(new_out_path), O_WRONLY | O_CREAT | O_APPEND, 0644);
         if(new_out_fd < 0){
             perror(new_out_path);
@@ -166,6 +175,7 @@ int parse_redir(char* command, int in_fd, int out_fd){
         exit_status = execute(command_args, bg);
     }
 
+    // restore old file descriptors
     dup2(old_in_fd, STDIN_FILENO);
     dup2(old_out_fd, STDOUT_FILENO);
 

@@ -27,6 +27,7 @@ int cd(int argc, char* argv[]){
         return 0;
     }
     char * path_abs;
+    // check for "-" for changing to last directory
     if(strcmp("-", argv[1]) == 0){
         path_abs = LASTDIR;
     }

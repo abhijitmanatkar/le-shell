@@ -6,6 +6,7 @@ extern process* PROCESSES;
 extern int shell_terminal;
 
 int jobs(int argc, char* argv[]){
+    // displays all background process
     
     if(argc > 1){
         fprintf(stderr, "jobs: too many arguments\n");
@@ -17,6 +18,7 @@ int jobs(int argc, char* argv[]){
 }
 
 int kjob(int argc, char* argv[]){
+    // sends a signal to a job
     
     if(argc != 3){
         fprintf(stderr, "kjob: incorrect number of arguments\n");
@@ -39,6 +41,7 @@ int kjob(int argc, char* argv[]){
 }
 
 int bg(int argc, char* argv[]){
+    // starts a suspended process in the background
 
     if(argc != 2){
         fprintf(stderr, "bg: incorrect number of arguments\n");
@@ -60,6 +63,7 @@ int bg(int argc, char* argv[]){
 }
 
 int fg(int argc, char* argv[]){
+    // starts a suspended process in the foreground
 
     if(argc != 2){
         fprintf(stderr, "fg: incorrect number of arguments\n");
@@ -94,6 +98,7 @@ int fg(int argc, char* argv[]){
 }
 
 int overkill(int argc){
+    // kills all background processes
 
     if(argc > 1){
         fprintf(stderr, "overkill: too many arguments");

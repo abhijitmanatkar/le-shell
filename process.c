@@ -115,29 +115,3 @@ process* get_process_by_pid(int pid, process* head){
     }
     return curr;
 }
-
-/*
-int main(){
-    
-    process* head = NULL;
-    
-    char inp;
-    while(scanf("%c", &inp)){
-        if(inp == 'a'){
-            char* name; int pid;
-            scanf("%d", &pid);
-            scanf("%s", name);
-            head = add_process(pid, name, head);
-        }
-        else if(inp == 'd'){
-            int pid;
-            scanf("%d", &pid);
-            head = del_process_by_pid(pid, head);
-        }
-        else if(inp == 'p'){
-            print_processes(head);
-        }
-    }
-
-}
-*/

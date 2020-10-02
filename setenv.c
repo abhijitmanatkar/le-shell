@@ -2,11 +2,13 @@
 #include "headers.h"
 
 void check_env(char* name){
+    // print the environment variable specified by "name"
     char* env_val = getenv(name);
     printf("$%s: %s\n", name, env_val);
 }
 
 int set_env(int argc, char* argv[]){
+    // sets an environment variable
     
     if(argc == 1 || argc > 3){
         fprintf(stderr, "setenv: incorrect number of arguments");
@@ -24,6 +26,7 @@ int set_env(int argc, char* argv[]){
 }
 
 int unset_env(int argc, char* argv[]){
+    // unsets an environment variable
 
     if(argc != 2){
         fprintf(stderr, "unsetenv: incorrect number of arguments\n");

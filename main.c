@@ -32,7 +32,10 @@ int main(){
         
         // get input
         int inp_size = getline(&inpbuf, &INPBUF_SZ, stdin);
+
+        // handle EOF
         if(inp_size < 1) quit();
+        
         inpbuf[strlen(inpbuf) - 1] = '\0';
 
         // seperating commands
@@ -47,6 +50,7 @@ int main(){
             command_no++;
         }
 
+        // parsing and executing
         for(int i = 0; i < command_no; i++){
             EXIT_STATUS = parse_pipe(command_list[i]);
         }

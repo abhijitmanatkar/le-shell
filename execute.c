@@ -52,13 +52,16 @@ int execute(char* argv[], int bg){
     if(fork_ret == 0){
         // child process
 
+        //put child process in its own group
         int pid = getpid();
         setpgid(pid, pid);
 
+        // if foreground, then give it control of the terminal
         if(bg == 0){
             tcsetpgrp(shell_terminal, pid);
         }
 
+        // reset all signals to default actions
         signal (SIGINT, SIG_DFL);
         signal (SIGQUIT, SIG_DFL);
         signal (SIGTSTP, SIG_DFL);

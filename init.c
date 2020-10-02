@@ -27,8 +27,9 @@ void init(){
     signal (SIGTTOU, SIG_IGN);
     signal (SIGCHLD, SIG_IGN);
 
+    // create a new process group for the shell and set it as the 
+    // foreground process group of the terminal
     int shell_pid = getpid();
-
     setpgid(shell_pid, shell_pid);
     tcsetpgrp(shell_terminal, shell_pid);
 
